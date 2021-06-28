@@ -269,7 +269,7 @@ class ServerlessAppSyncSimulator {
         refMap: {},
         getAttMap: {},
         importValueMap: {},
-        rds: get(this.serverless.service, 'custom.appsync-simulator.rds', {}),
+        rds: {},
         dynamoDb: {
           endpoint: `http://localhost:${get(
             this.serverless.service,
