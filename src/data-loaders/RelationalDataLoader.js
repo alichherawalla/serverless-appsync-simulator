@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
-import get from 'lodash/get'
-import Promise from 'bluebird'
+import get from 'lodash/get';
+import Promise from 'bluebird';
 
 export default class RelationalDataLoader {
   constructor(config) {
@@ -8,6 +8,7 @@ export default class RelationalDataLoader {
   }
 
   async load(req) {
+    console.log(JSON.stringify(req));
     try {
       const requiredKeys = [
         'dbDialect',
@@ -41,14 +42,9 @@ export default class RelationalDataLoader {
       };
 
       const sequelize = new Sequelize(config.uri, config.options);
-      const result = await Promise.mapSeries(
-        req.statements,
-        (statement) => {
-          return sequelize.query(statement);
-        },
-      );
-      
-      const rows = get(result, `[${req.statements.length - 1}][1].rows`, null)
+      const result = await Promise.mapSeries(req.statements, (statement) => sequelize.query(statement));
+
+      const rows = get(result, `[${req.statements.length - 1}][1].rows`, null);
       const length = rows?.length;
       if (length === 1) {
         return rows[0];
